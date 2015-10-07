@@ -299,6 +299,8 @@
     this.token       = new TokenFlow(this);
     this.owner       = new OwnerFlow(this);
     this.credentials = new CredentialsFlow(this);
+	this.applicationKey = new ApplicationKeyFlow(this);
+    this.trustedCredentials = new TrustedCredentialsFlow(this);
   }
 
   /**
@@ -762,6 +764,88 @@
         scope:      sanitizeScope(options.scopes),
         grant_type: 'client_credentials'
       })
+    }, function (err, data) {
+      // If an error exists or the data contains an error, return `done`.
+      if (err || (err = getAuthError(data))) {
+        return done(err);
+      }
+
+      return done(null, new ClientOAuth2Token(self, data));
+    });
+  };
+  
+   /**
+   * Support PNCP Application Flow OAuth 2.0 grant.
+   *
+   * Reference: http://tools.ietf.org/html/rfc6749#section-4.3
+   *
+   * @param {ClientOAuth2} client
+   */
+  function ApplicationKeyFlow (client) {
+    this.client = client;
+  }
+
+  /**
+   * PNCP Applciation key auth scheme
+   *
+   * @param {String}   username
+   * @param {String}   password
+   * @param {Function} done
+   */
+  ApplicationKeyFlow.prototype.getToken = function (applicationKey, done) {
+    var self          = this;
+    var options       = this.client.options;
+    var authorization = btoa(options.clientId + ':' + options.clientSecret);
+
+    return this.client._request({
+      url: options.accessTokenUri+"?grant_type=application_key&applicationKey="+application_key,
+      method: 'GET',
+      headers: {
+        'Accept':        'application/json, application/x-www-form-urlencoded',
+        'Content-Type':  'application/x-www-form-urlencoded',
+        'Authorization': 'Basic ' + authorization
+      }     
+    }, function (err, data) {
+      // If an error exists or the data contains an error, return `done`.
+      if (err || (err = getAuthError(data))) {
+        return done(err);
+      }
+
+      return done(null, new ClientOAuth2Token(self, data));
+    });
+  };
+  
+  /**
+   * Support Trusted Credentials Application Flow OAuth 2.0 grant.
+   *
+   * Reference: http://tools.ietf.org/html/rfc6749#section-4.3
+   *
+   * @param {ClientOAuth2} client
+   */
+  function TrustedCredentialsFlow (client) {
+    this.client = client;
+  }
+
+  
+  /**
+   * Trusted client credentials auth scheme
+   *
+   * @param {String}   trusted_token
+   * @param {Function} done
+   */
+  TrustedCredentialsFlow.prototype.getToken = function (trusted_token, done) {
+    var self          = this;
+    var options       = this.client.options;
+    var authorization = btoa(options.clientId + ':' + options.clientSecret);
+
+    return this.client._request({
+      url: options.accessTokenUri+"?grant_type=trusted_client_credentials&trusted_token="+trusted_token,
+      method: 'GET',
+      headers: {
+        'Accept':        'application/json, application/x-www-form-urlencoded',
+        'Content-Type':  'application/x-www-form-urlencoded',
+        'Authorization': 'Basic ' + authorization
+      }     
     }, function (err, data) {
       // If an error exists or the data contains an error, return `done`.
       if (err || (err = getAuthError(data))) {

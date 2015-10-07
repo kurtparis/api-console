@@ -29,6 +29,18 @@
     <input required="true" type="password" name="password" class="raml-console-sidebar-input raml-console-sidebar-security-field" ng-model="credentials.password" ng-change="onChange()"/>
     <span class="raml-console-field-validation-error"></span>
   </p>
+  
+  <p class="raml-console-sidebar-input-container" ng-if="applicationKeyOptionsEnabled()">
+    <label for="application_key" class="raml-console-sidebar-label">Application Key <span class="raml-console-side-bar-required-field">*</span></label>
+    <input required="true" type="text" name="application_key" class="raml-console-sidebar-input raml-console-sidebar-security-field" ng-model="credentials.application_key" ng-change="onChange()"/>
+    <span class="raml-console-field-validation-error"></span>
+  </p>
+  
+  <p class="raml-console-sidebar-input-container" ng-if="trustedCredentialsOptionsEnabled()">
+    <label for="trusted_credentials" class="raml-console-sidebar-label">Trusted Token <span class="raml-console-side-bar-required-field">*</span></label>
+    <input required="true" type="text" name="trusted_token" class="raml-console-sidebar-input raml-console-sidebar-security-field" ng-model="credentials.trusted_token" ng-change="onChange()"/>
+    <span class="raml-console-field-validation-error"></span>
+  </p>
 
   <p class="raml-console-sidebar-input-container">
     <label for="password" class="raml-console-sidebar-label">Scopes</label>

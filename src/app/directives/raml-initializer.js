@@ -7,7 +7,7 @@
       templateUrl: 'directives/raml-initializer.tpl.html',
       replace: true,
       controller: ['$scope', '$window', function($scope, $window) {
-        $scope.ramlUrl    = '';
+        
 
         ramlParserWrapper.onParseError(function(error) {
           /*jshint camelcase: false */
@@ -65,10 +65,9 @@
           }
         };
 
-        if (document.location.search.indexOf('?raml=') !== -1) {
-          $scope.ramlUrl = document.location.search.replace('?raml=', '');
-          $scope.loadFromUrl();
-        }
+        
+        $scope.loadFromUrl();
+        
       }]
     };
   };

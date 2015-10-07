@@ -82,6 +82,35 @@
         }
       });
     }
+	
+	 if (grantType === 'application_key') {
+      auth.applicationKey.getToken(this.credentials.applicationKey, function (err, user, raw) {
+        if (err) {
+          done(raw, err);
+        }
+
+        if (user && user.accessToken) {
+          user.request(options, function (err, res) {
+            done(res.raw, err);
+          });
+        }
+      });
+    }
+	
+	if (grantType === 'trusted_credentials') {
+        auth.trustedCredentials.getToken(this.credentials.trustedToken, function (err, user, raw) {
+            if (err) {
+              done(raw, err);
+            }
+
+            if (user && user.accessToken) {
+              user.request(options, function (err, res) {
+                done(res.raw, err);
+              });
+            }
+        });
+    }
+	
   };
 
   RAML.Client.AuthStrategies.Oauth2 = Oauth2;

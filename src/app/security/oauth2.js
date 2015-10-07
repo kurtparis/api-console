@@ -18,6 +18,14 @@
         $scope.isImplicitEnabled = function () {
           return $scope.credentials.grant === 'token';
         };
+		
+		$scope.applicationKeyOptionsEnabled = function () {
+          return $scope.credentials.grant === 'application_key';
+        };
+        
+        $scope.trustedCredentialsOptionsEnabled = function () {
+         return $scope.credentials.grant === 'trusted_credentials';
+       	};
 
         $scope.grants = [
           {
@@ -33,8 +41,16 @@
             value: 'owner'
           },
           {
+            label: 'API Access Token',
+            value: 'application_key'
+          },
+          {
             label: 'Client Credentials',
             value: 'credentials'
+          },
+          {
+              label: 'Trusted Client Credentials',
+              value: 'trusted_credentials'
           }
         ];
 
